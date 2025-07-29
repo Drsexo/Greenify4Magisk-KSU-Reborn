@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <permissions>
   <privapp-permissions package="com.oasisfeng.greenify">
     <permission name="com.oasisfeng.greenify.INTERNAL"/>
@@ -29,5 +28,6 @@
     <permission name="com.oasisfeng.island.permission.LAUNCH_PACKAGE"/>
     <permission name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"/>
     <permission name="com.google.android.c2dm.permission.RECEIVE"/>
+    <permission name="android.permission.RECEIVE_USER_PRESENT"/>
   </privapp-permissions>
 </permissions>

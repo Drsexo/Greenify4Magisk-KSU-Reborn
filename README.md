@@ -1,42 +1,35 @@
-<h1 align="center">Greenify4Magisk-KSU</h1>
+<h1 align="center">Greenify4Magisk/KSU Reborn</h1>
+<p align="center">
+  <img src="https://play-lh.googleusercontent.com/w261De9ZkHSxBGYcdFXG9BySiK2ugwMb7ReGh_AfN7UUSefB3ja_wPVtP91aewaKoKO0" alt="Greenify Icon" width="100"/>
+</p>
 
-> **Warning** </br>
-> This module has been updated with the latest MMT-Extended template and greenify app.
+> [!NOTE]  
+> **Updated with the latest MMT Reborn template and fixed permissions.**  
+> Fully working with KernelSU and Magisk.
 
-![GitHub all releases](https://img.shields.io/github/downloads/AzyrRuthless/Greenify4Magisk-KSU/total)
-![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/AzyrRuthless/Greenify4Magisk-KSU)
+<div align="center">
 
-## Module Explanation:
-This module allows Greenify to function as a system-integrated (privileged) app without modifying the ROM, enabling Boost Mode. It optimizes hibernation performance beyond the standard root option by injecting the APK into /system/priv-app. If the app appears as "Privileged" in the settings, the setup is complete.
+  ![Total downloads](https://img.shields.io/github/downloads/Drsexo/Greenify4Magisk-KSU-Reborn/total)
 
-Note: 
-- Follow [mm recovery module](https://github.com/Rikj000/Magisk-Manager-for-Recovery-Mode/releases) instructions in case of bootloop to disable/remove this module.
-- Custom MIUI mod ROMs (EU, VN, PL) might require latest DFE.
-
-### If after installing this module in KSU and rebooting, the Greenify app won't open
-Disable Umount modules by default in KSU Settings or Disable Unmount Specifically For Greenify, or just download the APK, then install and overwrite it.
+</div>
 
 
+## 📦 What this module does
 
-## Requirements: 
-- Android 9.0 - 15.0
-- Magisk v20.4+
-- [Magisk-Manager for Recovery mode](https://github.com/Rikj000/Magisk-Manager-for-Recovery-Mode/releases)
-- KernelSU v0.6.6+
-- APatch(?)
+This module integrates Greenify as a **privileged system app** to enable **Boost Mode**, enhancing hibernation performance without modifying the ROM.  
+It injects Greenify into `/system/priv-app`, allowing it to function natively as a system app — if the app shows "Privileged" in its settings, everything is working.
 
-## Installation:
-* This module already has the latest apk inside, just download one of zips from the mirror and install through the Magisk/KernelSU Manager app.
-
-## How to remove:
-* You can use Magisk/KernelSU Manager to uninstall the module.
-
-# Credits:
-* Greenify Developer - [Oasis Feng](https://play.google.com/store/apps/details?id=com.oasisfeng.greenify "Greenify's Play Store page").
-* Greenify4Magisk - [abacate123](https://forum.xda-developers.com/m/abacate123.6439974/)
+⚠️ If Greenify doesn’t open after reboot on KSU, try:
+- Disabling "Umount modules by default" in KSU settings  
+- Installing Greenify APK manually
 
 
-* Magisk Developer - [Topjohnwu](https://forum.xda-developers.com/apps/magisk/official-magisk-v7-universal-systemless-t3473445 "Magisk official XDA thread").
 
-### Third party code used:
-* [MMT-Extended](https://github.com/Zackptg5/MMT-Extended "Template's repository").
+## 🙌 Credits
+
+- [Oasis Feng](https://play.google.com/store/apps/details?id=com.oasisfeng.greenify) — Greenify developer  
+- [Topjohnwu](https://github.com/topjohnwu) — Magisk developer
+- [abacate123](https://forum.xda-developers.com/m/abacate123.6439974/) — Original Magisk integration  
+- [AzyrRuthless](https://github.com/AzyrRuthless/Greenify4Magisk-KSU) — Original KSU fork  
+- [iamlooper](https://github.com/iamlooper/MMT-Reborn) — MMT-Reborn Template  
+- [ApkMirror](https://www.apkmirror.com/apk/oasis-feng/greenify/greenify-5-1-1-release/) — Greenify APK

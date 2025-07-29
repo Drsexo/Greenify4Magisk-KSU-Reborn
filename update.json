@@ -1,6 +1,6 @@
 {
-  "version": "v5.1.1-RC1",
-  "versionCode": 51101,
-  "zipUrl": "https://github.com/AzyrRuthless/Greenify4Magisk-KSU/releases/download/v5.1.1-RC1/Greenify4Magisk-KSU-v5.1.1-RC1.zip",
-  "changelog": "https://raw.githubusercontent.com/AzyrRuthless/Greenify4Magisk-KSU/main/changelog.md"
+  "version": "5.1.1",
+  "versionCode": 511,
+  "zipUrl": "https://github.com/Drsexo/Greenify4Magisk-KSU-Reborn/releases/download/v5.1.1/Greenify4Magisk-KSU-Reborn-v5.1.1.zip",
+  "changelog": "https://github.com/Drsexo/Greenify4Magisk-KSU-Reborn/releases/tag/v5.1.1"
 }

@@ -1,9 +1,0 @@
-# Ensure LF line endings for specific file types and directories
-*.sh    text eol=lf
-*.prop  text eol=lf
-*.md    text eol=lf
-*.xml   text eol=lf
-META-INF/** text eol=lf
-
-# Mark binary files to prevent modification
-common/addon/**/tools/** binary
