@@ -1,8 +1,8 @@
 id=Greenify4MagiskKSUReborn
 name=Greenify4Magisk/KSU Reborn
-version=5.1.1
-versionCode=511
+version=5.1.1.1
+versionCode=5111
 author=DrSexo
 description=A very simple module to make Greenify work as a privileged app, to achieve a faster hibernation performance, systemlessly on A11+
 updateJson=https://raw.githubusercontent.com/Drsexo/Greenify4Magisk-KSU-Reborn/main/update.json
-banner=banner.png
+banner=banner.jpg

@@ -5,7 +5,7 @@
 
 > [!NOTE]  
 > **Updated with the latest MMT Reborn template and fixed permissions.**  
-> Fully working with KernelSU and Magisk.
+> Fully working with KernelSU and Magisk and APatch.
 
 <div align="center">
 
@@ -23,7 +23,12 @@ It injects Greenify into `/system/priv-app`, allowing it to function natively as
 - Disabling "Umount modules by default" in KSU settings  
 - Installing Greenify APK manually
 
+## ⚙️ Requirements 
 
+- Android 9.0 - 15.0
+- Magisk v20.4+
+- KernelSU v0.6.6+
+- APatch
 
 ## 🙌 Credits
 
@@ -32,4 +37,3 @@ It injects Greenify into `/system/priv-app`, allowing it to function natively as
 - [abacate123](https://forum.xda-developers.com/m/abacate123.6439974/) — Original Magisk integration  
 - [AzyrRuthless](https://github.com/AzyrRuthless/Greenify4Magisk-KSU) — Original KSU fork  
 - [iamlooper](https://github.com/iamlooper/MMT-Reborn) — MMT-Reborn Template  
-- [ApkMirror](https://www.apkmirror.com/apk/oasis-feng/greenify/greenify-5-1-1-release/) — Greenify APK
