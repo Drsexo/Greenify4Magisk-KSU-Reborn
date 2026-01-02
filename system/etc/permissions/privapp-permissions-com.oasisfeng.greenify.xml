@@ -1,12 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <permissions>
   <privapp-permissions package="com.oasisfeng.greenify">
-    <permission name="android.permission.UPDATE_CONFIG"/>
+    <permission name="com.oasisfeng.greenify.INTERNAL"/>
+    <permission name="com.oasisfeng.greenify.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"/>
+    <permission name="android.permission.POST_NOTIFICATIONS"/>
+    <permission name="android.permission.QUERY_ALL_PACKAGES"/>
+    <permission name="android.permission.FOREGROUND_SERVICE"/>
     <permission name="android.permission.PACKAGE_USAGE_STATS"/>
     <permission name="android.permission.GET_APP_OPS_STATS"/>
-    <permission name="android.permission.DUMP"/>
-    <permission name="android.permission.WRITE_SECURE_SETTINGS"/>
     <permission name="android.permission.FORCE_STOP_PACKAGES"/>
-    <permission name="android.permission.INTERACT_ACROSS_USERS"/>
+    <permission name="android.permission.DUMP"/>
     <permission name="android.permission.READ_LOGS"/>
+    <permission name="android.permission.WRITE_SECURE_SETTINGS"/>
+    <permission name="android.permission.WRITE_SETTINGS"/>
+    <permission name="android.permission.UPDATE_CONFIG"/>
+    <permission name="android.permission.GET_TASKS"/>
+    <permission name="android.permission.REAL_GET_TASKS"/>
+    <permission name="android.permission.EXPAND_STATUS_BAR"/>
+    <permission name="android.permission.DISABLE_KEYGUARD"/>
+    <permission name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <permission name="android.permission.WAKE_LOCK"/>
+    <permission name="android.permission.RECEIVE_USER_PRESENT"/>
+    <permission name="android.permission.INTERACT_ACROSS_USERS"/>
+    <permission name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <permission name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+    <permission name="com.oasisfeng.island.permission.FREEZE_PACKAGE"/>
+    <permission name="com.oasisfeng.island.permission.LAUNCH_PACKAGE"/>
+    <permission name="moe.shizuku.manager.permission.API_V23"/>
+    <permission name="android.permission.INTERACT_ACROSS_USERS"/>
   </privapp-permissions>
 </permissions>
