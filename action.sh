@@ -1,6 +1,27 @@
 #!/system/bin/sh
 
 GREENIFY_PKG="com.oasisfeng.greenify"
+TIMEOUT=30
+
+
+COLS=$(stty size 2>/dev/null | awk '{print $2}')
+case "$COLS" in ''|*[!0-9]*) COLS=40 ;; esac
+[ "$COLS" -gt 54 ] && COLS=54
+[ "$COLS" -lt 20 ] && COLS=40
+
+_iw=$((COLS - 4))
+LINE="" _i=0
+while [ $_i -lt $_iw ]; do
+  LINE="${LINE}─"
+  _i=$((_i + 1))
+done
+BOX_TOP="  ${LINE}"
+BOX_BOT="  ${LINE}"
+unset _i _iw
+
+if ! command -v timeout >/dev/null 2>&1; then
+  timeout() { shift; "$@"; }
+fi
 
 print_banner() {
   echo ""
@@ -12,62 +33,89 @@ print_banner() {
   echo ""
   echo "        Bulk app hibernation manager"
   echo ""
-  echo "==========================================="
+}
+
+vol_key_prompt() {
+  local prompt="$1"
+  local up_label="$2"
+  local down_label="$3"
+  local default="$4"
+
   echo ""
-}
+  echo "  $prompt"
+  echo "  Vol [+] $up_label  |  Vol [-] $down_label"
+  echo ""
 
-keycheck() {
-  local key
-  key=$(timeout 0.01 getevent -lc 1 2>&1 | grep KEY_VOLUME)
-  case "$key" in
-    *KEY_VOLUMEUP*) return 0 ;;
-    *KEY_VOLUMEDOWN*) return 1 ;;
-    *) return 2 ;;
-  esac
-}
+  while :; do
+    event=$(timeout "$TIMEOUT" getevent -qlc 1 2>/dev/null)
+    code=$?
 
-clear_keys() {
-  while timeout 0.01 getevent -lc 1 2>&1 | grep -q KEY_VOLUME; do :; done
-}
-
-wait_for_key() {
-  local timeout_count=0
-  local max_timeout=$1
-  
-  while [ $timeout_count -lt $max_timeout ]; do
-    keycheck
-    local result=$?
-    if [ $result -eq 0 ] || [ $result -eq 1 ]; then
-      clear_keys
-      return $result
+    if [ "$code" -eq 124 ] || [ "$code" -eq 143 ]; then
+      if [ "$default" = "UP" ]; then
+        return 0
+      else
+        return 1
+      fi
     fi
-    timeout_count=$((timeout_count + 1))
+
+    if echo "$event" | grep -q "KEY_VOLUMEUP.*DOWN"; then
+      return 0
+    fi
+
+    if echo "$event" | grep -q "KEY_VOLUMEDOWN.*DOWN"; then
+      return 1
+    fi
   done
-  return 2
+}
+
+vol_key_cycle() {
+  local options="$1"
+  local count="$2"
+
+  local choice=1
+  echo ""
+  echo "  Vol [+] Next  |  Vol [-] Confirm"
+  echo ""
+
+  local opt
+  opt=$(echo "$options" | sed -n "${choice}p")
+  echo "  > $opt"
+
+  while :; do
+    event=$(timeout "$TIMEOUT" getevent -qlc 1 2>/dev/null)
+    code=$?
+
+    if [ "$code" -eq 124 ] || [ "$code" -eq 143 ]; then
+      return $choice
+    fi
+
+    if echo "$event" | grep -q "KEY_VOLUMEUP.*DOWN"; then
+      choice=$((choice + 1))
+      [ $choice -gt $count ] && choice=1
+      opt=$(echo "$options" | sed -n "${choice}p")
+      echo "  > $opt"
+    fi
+
+    if echo "$event" | grep -q "KEY_VOLUMEDOWN.*DOWN"; then
+      return $choice
+    fi
+  done
 }
 
 check_greenify() {
   echo "- Checking Greenify installation..."
   sleep 0.5
-  
+
   if ! pm path "$GREENIFY_PKG" >/dev/null 2>&1; then
     echo ""
     echo "  [X] Greenify is not installed!"
-    echo "      Please reboot first."
+    echo "      Please reinstall."
     echo ""
     exit 1
   fi
-  
-  if pm path "$GREENIFY_PKG" 2>/dev/null | grep -q "^package:/data/app/"; then
-    echo ""
-    echo "  [X] Greenify is installed as user app!"
-    echo "      Please reboot to apply system app."
-    echo ""
-    exit 1
-  fi
-  
+
   echo ""
-  echo "  [OK] Installed as system app"
+  echo "  [OK] Greenify found"
   echo ""
   sleep 0.5
 }
@@ -97,15 +145,15 @@ get_greenify_uid() {
 get_greenify_path() {
   USER_ID=$(am get-current-user 2>/dev/null | grep -o '[0-9]*' | head -1)
   [ -z "$USER_ID" ] && USER_ID="0"
-  
+
   if [ "$USER_ID" = "0" ]; then
     GREENIFY_DIR="/data/data/$GREENIFY_PKG/shared_prefs"
   else
     GREENIFY_DIR="/data/user/$USER_ID/$GREENIFY_PKG/shared_prefs"
   fi
-  
+
   GREENIFY_UID=$(get_greenify_uid)
-  
+
   if [ ! -d "$GREENIFY_DIR" ]; then
     echo ""
     echo "  [X] Greenify data not found!"
@@ -113,7 +161,7 @@ get_greenify_path() {
     echo ""
     exit 1
   fi
-  
+
   GREENIFY_XML="$GREENIFY_DIR/greenfied_apps_x.xml"
 }
 
@@ -133,9 +181,9 @@ get_excluded_apps() {
   echo "com.qualcomm.location com.android.location.fused com.oasisfeng.greenify"
   # Keyboard apps
   echo "com.android.inputmethod.latin com.google.android.inputmethod.latin com.samsung.android.honeyboard"
-  echo "com.oneplus.keyboard com.miui.keyboard com.huawei.inputmethod com.oppo.keyboard com.vivo.inputmethod"
+  echo "com.oneplus.keyboard com.miui.keyboard com.huawei.inputmethod com.oppo.keyboard com.vivo.inputmethod ru.yandex.androidkeyboard"
   # Launcher apps
-  echo "com.samsung.android.launcher com.oneplus.launcher com.miui.home com.huawei.android.launcher"
+  echo "com.samsung.android.launcher com.oneplus.launcher com.miui.home com.huawei.android.launcher com.android.launcher3"
   echo "com.oppo.launcher com.vivo.launcher com.sec.android.app.launcher com.lge.launcher3"
   # Dialer apps
   echo "com.google.android.dialer com.samsung.android.dialer com.oneplus.dialer com.miui.dialer"
@@ -156,21 +204,21 @@ get_excluded_apps() {
 
 generate_xml() {
   local choice=$1
-  
+
   get_greenify_path
   check_and_stop_greenify
-  
+
   echo "- Generating app list..."
   sleep 0.5
-  
+
   if [ -f "$GREENIFY_XML" ]; then
     cp "$GREENIFY_XML" "${GREENIFY_XML}.backup"
-    echo "  Existing file backed up"
+    echo "  Existing list backed up"
   fi
-  
+
   local temp_packages="/data/local/tmp/greenify_packages_$$.tmp"
   local all_excluded=$(get_excluded_apps | tr '\n' ' ')
-  
+
   case $choice in
     1)
       echo "  Getting user apps..."
@@ -185,151 +233,109 @@ generate_xml() {
       pm list packages 2>/dev/null | sed 's/package://' > "$temp_packages"
       ;;
   esac
-  
+
   echo '<?xml version='\''1.0'\'' encoding='\''utf-8'\'' standalone='\''yes'\'' ?>' > "$GREENIFY_XML"
   echo '<map>' >> "$GREENIFY_XML"
-  
+
   local count=0
   while IFS= read -r package || [ -n "$package" ]; do
     [ -z "$package" ] && continue
-    
+
     local skip=false
     for excluded in $all_excluded; do
       [ "$package" = "$excluded" ] && skip=true && break
     done
-    
+
     if [ "$skip" = "false" ]; then
       add_package_to_xml "$package" "$GREENIFY_XML"
       count=$((count + 1))
     fi
   done < "$temp_packages"
-  
+
   rm -f "$temp_packages"
   echo '</map>' >> "$GREENIFY_XML"
-  
+
   if [ ! -f "$GREENIFY_XML" ] || [ ! -s "$GREENIFY_XML" ]; then
     echo ""
     echo "  [X] Failed to create XML file!"
     exit 1
   fi
-  
+
   chmod 660 "$GREENIFY_XML"
   chown "$GREENIFY_UID:$GREENIFY_UID" "$GREENIFY_XML"
   chcon "u:object_r:app_data_file:s0:c512,c768" "$GREENIFY_XML" 2>/dev/null
-  
+
   sleep 0.5
   echo ""
-  echo "==========================================="
-  echo ""
+  echo "$BOX_TOP"
   echo "  [OK] Added $count apps to Greenify"
+  echo "$BOX_BOT"
   echo ""
-  echo "==========================================="
-  echo ""
-  echo "  Open Greenify to see and review the changes."
+  echo "  Open Greenify to see and review"
+  echo "  the changes."
   echo ""
 }
 
 main() {
   print_banner
   check_greenify
-  
-  echo "-------------------------------------------"
-  echo ""
-  echo "Add apps to hibernation list?"
-  echo "This will overwrite the current list."
-  echo ""
-  echo "Vol [+] Yes        Vol [-] No"
-  echo ""
-  
-  clear_keys
-  wait_for_key 300
+
+  echo "$BOX_TOP"
+  echo "  [!] This will OVERWRITE your current"
+  echo "  Greenify hibernation list!"
+  echo "  (A backup will be saved)"
+  echo "$BOX_BOT"
+
+  vol_key_prompt "Add apps to hibernation list?" "Yes" "No" "DOWN"
   local result=$?
-  
+
   if [ $result -eq 0 ]; then
+
+    OPTIONS="[✓] User apps only
+[⚠] System apps only
+[⚠] All apps"
+
     echo ""
-    echo "-------------------------------------------"
-    echo ""
-    echo "Select which apps to add:"
-    echo ""
-    echo "Vol [+] Next       Vol [-] Confirm"
-    echo ""
-    sleep 0.05
-    
-    clear_keys
-    
-    local choice=1
-    local selected=false
-    local timeout=0
-    
-    echo "  > [✓] User apps only"
-    
-    while [ "$selected" = "false" ] && [ $timeout -lt 500 ]; do
-      keycheck
-      local key=$?
-      
-      if [ $key -eq 0 ]; then
-        choice=$((choice + 1))
-        [ $choice -gt 3 ] && choice=1
-        case $choice in
-          1) echo "  > [✓] User apps only" ;;
-          2) echo "  > [⚠] System apps only" ;;
-          3) echo "  > [⚠] All apps" ;;
-        esac
-        clear_keys
-      elif [ $key -eq 1 ]; then
-        selected=true
-        clear_keys
-      else
-        timeout=$((timeout + 1))
-      fi
-    done
-    
-    if [ "$selected" = "false" ]; then
-      echo ""
-      echo "  Timeout! Cancelled."
-      echo ""
-      exit 0
-    fi
-    
+    echo "  Select which apps to add:"
+
+    vol_key_cycle "$OPTIONS" 3
+    local choice=$?
+
     echo ""
     case $choice in
       1) echo "  Selected: User apps" ;;
       2) echo "  Selected: System apps" ;;
       3) echo "  Selected: All apps" ;;
     esac
-    
-    sleep 0.1
-    
+
     if [ $choice -eq 2 ] || [ $choice -eq 3 ]; then
       echo ""
-      echo "  +------------------------------------------+"
-      echo "  |  [⚠] WARNING                             |"
-      echo "  |                                          |"
-      echo "  |  Greenifying system apps can cause       |"
-      echo "  |  instability and crashes!                |"
-      echo "  |                                          |"
-      echo "  |  Review the list in Greenify after.      |"
-      echo "  +------------------------------------------+"
+      echo "$BOX_TOP"
+      echo "  [⚠] WARNING"
       echo ""
-      echo "  Continue? Vol [+] Yes    Vol [-] No"
+      echo "  Greenifying system apps can cause"
+      echo "  instability and crashes!"
       echo ""
-      
-      clear_keys
-      wait_for_key 300
+      echo "  Review the list in Greenify after."
+      echo "$BOX_BOT"
+
+      vol_key_prompt "Continue?" "Yes" "No" "DOWN"
       local confirm=$?
-      
+
       if [ $confirm -ne 0 ]; then
+        echo ""
         echo "  Cancelled."
         echo ""
         exit 0
       fi
     fi
-    
+
     echo ""
     generate_xml $choice
-    
+
   else
-    echo "Cancelled."
+    echo ""
+    echo "  Cancelled."
     echo ""
   fi
 }

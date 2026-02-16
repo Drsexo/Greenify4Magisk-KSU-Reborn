@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.  
 
+## [5.1.1.3] - 2026-02-16
+- Added one-time permissions granting service.
+- Improved volume key detection compatibility across devices.
+- Removed duplicate permission entry.
+- Minor fixes and cleanup.
+
 ## [5.1.1.2] - 2026-01-01
 
 - Added smart automatic app list generator accessible via the Action button in your root manager. Supports multi-user profiles and automatic backup of existing app lists.

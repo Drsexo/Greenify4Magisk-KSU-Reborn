@@ -1,7 +1,7 @@
 id=Greenify4MagiskKSUReborn
 name=Greenify Systemizer
-version=5.1.1.2
-versionCode=5112
+version=5.1.1.3
+versionCode=5113
 author=DrSexo
 description=Integrates Greenify as a privileged system app to enable boost mode™, with automatic bulk app list generation.
 updateJson=https://raw.githubusercontent.com/Drsexo/Greenify4Magisk-KSU-Reborn/main/update.json

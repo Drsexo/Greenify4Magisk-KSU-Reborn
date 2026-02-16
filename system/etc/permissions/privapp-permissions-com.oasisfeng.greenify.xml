@@ -27,6 +27,5 @@
     <permission name="com.oasisfeng.island.permission.FREEZE_PACKAGE"/>
     <permission name="com.oasisfeng.island.permission.LAUNCH_PACKAGE"/>
     <permission name="moe.shizuku.manager.permission.API_V23"/>
-    <permission name="android.permission.INTERACT_ACROSS_USERS"/>
   </privapp-permissions>
 </permissions>

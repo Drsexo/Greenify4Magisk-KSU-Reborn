@@ -6,11 +6,15 @@
 > [!NOTE]
 > **Fully working with KernelSU and Magisk and APatch.**
 
+> [!TIP]
+> **Check out my other module [Frosty 🧊](https://github.com/Drsexo/Frosty) if you want to maximize your battery saving.**
+
 <div align="center">
 
   ![Total downloads](https://img.shields.io/github/downloads/Drsexo/Greenify4Magisk-KSU-Reborn/total)
 
 </div>
+
 
 
 ## 📦 What this module does
@@ -29,10 +33,11 @@ The module features an integrated bulk hibernation manager. To use it: install t
 ⚠️ If Greenify doesn’t open after reboot on KSU, try:
 - Disabling "Umount modules by default" in KSU settings  
 - Installing Greenify APK manually
+- Install [Hybrid Mount](https://github.com/Hybrid-Mount/meta-hybrid_mount)
 
 ## ⚙️ Requirements 
 
-- Android 9.0 - 15.0
+- Android 12+
 - Magisk v20.4+
 - KernelSU v0.6.6+
 - APatch
